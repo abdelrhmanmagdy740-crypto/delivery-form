@@ -6,153 +6,280 @@
   <title>استمارة تسجيل المناديب - RA'AD</title>
   <style>
     :root {
-      --bg-color: #0b132b;
-      --card-bg: #1c2541;
+      --bg: #090e1a;
+      --card: #131d36;
       --primary: #f59e0b;
       --primary-hover: #d97706;
-      --talabat: #ea580c;
-      --breadfast: #9333ea;
-      --text-main: #ffffff;
+      --border: #243456;
+      --text: #ffffff;
       --text-muted: #94a3b8;
-      --border: #334155;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
-    .container { background-color: var(--card-bg); width: 100%; max-width: 500px; border-radius: 16px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid var(--border); }
-    .header { text-align: center; margin-bottom: 25px; }
-    .badge { display: inline-block; background: rgba(245, 158, 11, 0.15); color: var(--primary); padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; border: 1px solid var(--primary); margin-bottom: 10px; }
-    h1 { font-size: 1.4rem; color: #fff; margin-bottom: 6px; }
-    p.desc { font-size: 0.9rem; color: var(--text-muted); }
+    body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 15px; }
+    .card { background-color: var(--card); width: 100%; max-width: 480px; border-radius: 18px; padding: 25px; box-shadow: 0 12px 35px rgba(0,0,0,0.6); border: 1px solid var(--border); }
     
+    .logo-header { text-align: center; margin-bottom: 20px; }
+    .shield-logo { width: 90px; height: 90px; margin: 0 auto 10px; display: block; filter: drop-shadow(0 4px 10px rgba(245, 158, 11, 0.3)); }
+    .badge { display: inline-block; background: rgba(245, 158, 11, 0.12); color: var(--primary); padding: 5px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: bold; border: 1px solid var(--primary); }
+    
+    .progress-bar { display: flex; justify-content: space-between; margin-bottom: 25px; position: relative; }
+    .progress-bar::after { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: var(--border); z-index: 1; transform: translateY(-50%); }
+    .progress-step { width: 28px; height: 28px; border-radius: 50%; background: var(--border); color: var(--text-muted); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; position: relative; z-index: 2; transition: 0.3s ease; }
+    .progress-step.active { background: var(--primary); color: #000; box-shadow: 0 0 10px rgba(245, 158, 11, 0.5); }
+    .progress-step.done { background: #22c55e; color: #fff; }
+
+    .step-title { font-size: 1.15rem; color: #fff; margin-bottom: 8px; font-weight: bold; }
+    .step-sub { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; }
+
     .step { display: none; }
-    .step.active { display: block; animation: fadeIn 0.3s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .step.active { display: block; animation: slideIn 0.25s ease; }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-    .form-group { margin-bottom: 18px; }
-    label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; color: #e2e8f0; }
-    input[type="text"], input[type="tel"], select { width: 100%; padding: 12px; background: #0f172a; border: 1px solid var(--border); border-radius: 8px; color: #fff; font-size: 0.95rem; outline: none; }
+    .input-group { margin-bottom: 15px; }
+    label { display: block; font-size: 0.88rem; margin-bottom: 6px; color: #cbd5e1; font-weight: 600; }
+    label span.opt { font-size: 0.75rem; color: #94a3b8; font-weight: normal; }
+    label span.req { color: #f43f5e; }
+
+    input[type="text"], input[type="tel"], select { width: 100%; padding: 12px 14px; background: #090e1a; border: 1px solid var(--border); border-radius: 10px; color: #fff; font-size: 0.95rem; outline: none; transition: 0.2s; }
     input:focus, select:focus { border-color: var(--primary); }
-    input[type="file"] { width: 100%; padding: 10px; background: #0f172a; border: 1px dashed var(--border); border-radius: 8px; color: var(--text-muted); cursor: pointer; }
+    input[type="file"] { width: 100%; padding: 9px; background: #090e1a; border: 1px dashed var(--border); border-radius: 8px; color: var(--text-muted); font-size: 0.85rem; cursor: pointer; }
 
-    .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.2s ease; margin-top: 10px; }
-    .btn-primary { background-color: var(--primary); color: #0b132b; }
-    .btn-primary:hover { background-color: var(--primary-hover); }
-    .btn-talabat { background-color: var(--talabat); color: #fff; }
-    .btn-talabat:hover { background-color: #c2410c; }
-    .btn-breadfast { background-color: var(--breadfast); color: #fff; }
-    .btn-breadfast:hover { background-color: #7e22ce; }
-    .btn-secondary { background-color: #334155; color: #fff; margin-top: 8px; }
-    .btn-secondary:hover { background-color: #475569; }
+    .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+    .btn { flex: 1; padding: 12px; border: none; border-radius: 10px; font-weight: bold; font-size: 0.95rem; cursor: pointer; transition: 0.2s ease; }
+    .btn-next { background: var(--primary); color: #090e1a; }
+    .btn-next:hover { background: var(--primary-hover); }
+    .btn-prev { background: #243456; color: #cbd5e1; }
+    .btn-prev:hover { background: #334a7a; }
 
-    .note { font-size: 0.8rem; color: #cbd5e1; margin-top: 4px; }
-    #status { margin-top: 15px; text-align: center; font-weight: bold; font-size: 0.95rem; }
+    .upload-box { background: rgba(9, 14, 26, 0.6); padding: 12px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 12px; }
+    #statusBox { text-align: center; margin-top: 15px; font-size: 0.95rem; font-weight: bold; }
     .success { color: #22c55e; }
-    .error { color: #ef4444; }
+    .error { color: #f43f5e; }
     .loading { color: var(--primary); }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="header">
+<div class="card">
+  <!-- رأس الصفحة واللوجو -->
+  <div class="logo-header">
+    <svg class="shield-logo" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M250 20 L420 80 V240 C420 350 250 470 250 470 C250 470 80 350 80 240 V80 L250 20 Z" fill="#0b132b" stroke="#f59e0b" stroke-width="12"/>
+      <path d="M250 45 L395 95 V235 C395 330 250 435 250 435 C250 435 105 330 105 235 V95 L250 45 Z" fill="#131d36" stroke="#d97706" stroke-width="4"/>
+      <path d="M140 180 L250 110 L360 180 V220 L250 150 L140 220 Z" fill="#f59e0b"/>
+      <path d="M120 230 C120 310 250 400 250 400 C250 400 380 310 380 230 L340 210 C340 280 250 350 250 350 C250 350 160 280 160 210 Z" fill="#d97706"/>
+      <text x="250" y="115" font-family="'Impact', sans-serif" font-size="52" fill="#ffffff" font-weight="bold" text-anchor="middle" letter-spacing="4">RA'AD</text>
+    </svg>
     <div class="badge">RA'AD Delivery Fleet</div>
-    <h1>طلب انضمام مندوب توصيل</h1>
-    <p class="desc">اختر المسار واستكمل بيانات التسجيل بسهولة</p>
   </div>
 
-  <!-- المرحلة 1 -->
+  <!-- مؤشر المراحل -->
+  <div class="progress-bar">
+    <div class="progress-step active" id="dot1">1</div>
+    <div class="progress-step" id="dot2">2</div>
+    <div class="progress-step" id="dot3">3</div>
+    <div class="progress-step" id="dot4">4</div>
+    <div class="progress-step" id="dot5">5</div>
+  </div>
+
+  <!-- المرحلة 1: الاسم بالكامل -->
   <div class="step active" id="step1">
-    <div class="form-group">
-      <label>الاسم بالكامل:</label>
-      <input type="text" id="fullName" placeholder="أدخل اسمك رباعي" required>
+    <div class="step-title">المرحلة الأولى: الاسم بالكامل</div>
+    <p class="step-sub">يرجى كتابة الاسم كما هو مدون في البطاقة الشخصية.</p>
+    <div class="input-group">
+      <label>الاسم رباعي <span class="req">*</span></label>
+      <input type="text" id="fullName" placeholder="أدخل اسمك رباعي">
     </div>
-    <div class="form-group">
-      <label>رقم الهاتف (واتساب):</label>
-      <input type="tel" id="phone" placeholder="01xxxxxxxxx" required>
+    <div class="btn-group">
+      <button type="button" class="btn btn-next" onclick="toStep2()">التالي ➔</button>
     </div>
-    <div class="form-group">
-      <label>اختر مسار التقديم:</label>
-      <select id="companyChoice">
+  </div>
+
+  <!-- المرحلة 2: رقم الهاتف والواتساب -->
+  <div class="step" id="step2">
+    <div class="step-title">المرحلة الثانية: رقم الهاتف للتواصل</div>
+    <p class="step-sub">يرجى إدخال رقم هاتف نشط عليه تطبيق واتساب.</p>
+    <div class="input-group">
+      <label>رقم الهاتف (واتساب) <span class="req">*</span></label>
+      <input type="tel" id="phone" placeholder="01xxxxxxxxx">
+    </div>
+    <div class="btn-group">
+      <button type="button" class="btn btn-prev" onclick="goToStep(1)">رجوع</button>
+      <button type="button" class="btn btn-next" onclick="toStep3()">التالي ➔</button>
+    </div>
+  </div>
+
+  <!-- المرحلة 3: الشركة المراد التقديم لها -->
+  <div class="step" id="step3">
+    <div class="step-title">المرحلة الثالثة: تحديد الشركة</div>
+    <p class="step-sub">اختر الشركة التي ترغب في الانضمام إليها.</p>
+    <div class="input-group">
+      <label>الشركة المراد التقديم لها <span class="req">*</span></label>
+      <select id="companyChoice" onchange="adjustVehicles()">
         <option value="">-- اضغط للاختيار --</option>
-        <option value="talabat">طلبات (Talabat)</option>
-        <option value="breadfast">بريد فاست (Breadfast)</option>
+        <option value="طلبات">طلبات (Talabat)</option>
+        <option value="بريد فاست">بريد فاست (Breadfast)</option>
       </select>
     </div>
-    <button type="button" class="btn btn-primary" onclick="nextStep()">التالي ➔</button>
+    <div class="btn-group">
+      <button type="button" class="btn btn-prev" onclick="goToStep(2)">رجوع</button>
+      <button type="button" class="btn btn-next" onclick="toStep4()">التالي ➔</button>
+    </div>
   </div>
 
-  <!-- المرحلة 2: مسار طلبات -->
-  <div class="step" id="stepTalabat">
-    <div class="form-group">
-      <label>المركبة المطلوبة لطلبات:</label>
-      <select id="talabatVehicle">
+  <!-- المرحلة 4: وسيلة العمل (المركبة) -->
+  <div class="step" id="step4">
+    <div class="step-title">المرحلة الرابعة: وسيلة العمل</div>
+    <p class="step-sub">اختر المركبة المتاحة معك للعمل.</p>
+    <div class="input-group">
+      <label>المركبة <span class="req">*</span></label>
+      <select id="vehicleChoice">
+        <option value="">-- اختر وسيلة العمل --</option>
         <option value="موتوسيكل">موتوسيكل</option>
         <option value="عجلة">عجلة</option>
       </select>
     </div>
-    <div class="form-group">
-      <label>رفع صورة البطاقة أو رخصة القيادة:</label>
-      <input type="file" id="talabatDoc" accept="image/*,.pdf">
-      <div class="note">يفضل التقاط صورة واضحة للوجهين.</div>
+    <div class="btn-group">
+      <button type="button" class="btn btn-prev" onclick="goToStep(3)">رجوع</button>
+      <button type="button" class="btn btn-next" onclick="toStep5()">التالي ➔</button>
     </div>
-    <button type="button" class="btn btn-talabat" id="talabatSubmitBtn" onclick="submitRegistration('طلبات', 'talabat')">تأكيد وإرسال البيانات</button>
-    <button type="button" class="btn btn-secondary" onclick="prevStep()">رجوع</button>
   </div>
 
-  <!-- المرحلة 2: مسار بريد فاست -->
-  <div class="step" id="stepBreadfast">
-    <div class="form-group">
-      <label>المركبة المتاحة لبريد فاست:</label>
-      <input type="text" value="موتوسيكلات فقط" disabled style="opacity: 0.85;">
+  <!-- المرحلة 5 (المسار الأول): أوراق العجلة -->
+  <div class="step" id="step5Bicycle">
+    <div class="step-title">المرحلة الخامسة: رفع المستندات المطلوبة</div>
+    <p class="step-sub">مطلوب بطاقة الرقم القومي سارية لتعيينات العجل.</p>
+    
+    <div class="upload-box">
+      <label>الواجهة الأمامية للبطاقة الشخصية <span class="req">*</span></label>
+      <input type="file" id="idFrontBike" accept="image/*,.pdf">
     </div>
-    <div class="form-group">
-      <label>رفع صورة رخصة الموتوسيكل / القيادة:</label>
-      <input type="file" id="breadfastDoc" accept="image/*,.pdf">
-      <div class="note">التعيين مخصص للموتوسيكلات فقط.</div>
+
+    <div class="upload-box">
+      <label>الواجهة الخلفية للبطاقة الشخصية <span class="req">*</span></label>
+      <input type="file" id="idBackBike" accept="image/*,.pdf">
     </div>
-    <button type="button" class="btn btn-breadfast" id="breadfastSubmitBtn" onclick="submitRegistration('بريد فاست', 'breadfast')">تأكيد وإرسال البيانات</button>
-    <button type="button" class="btn btn-secondary" onclick="prevStep()">رجوع</button>
+
+    <div class="btn-group">
+      <button type="button" class="btn btn-prev" onclick="goToStep(4)">رجوع</button>
+      <button type="button" class="btn btn-next" id="btnBikeSubmit" onclick="submitFinalData('عجلة')">تأكيد وإرسال الطلب</button>
+    </div>
   </div>
 
-  <div id="status"></div>
+  <!-- المرحلة 5 (المسار الثاني): أوراق الموتوسيكل -->
+  <div class="step" id="step5Moto">
+    <div class="step-title">المرحلة الخامسة: رفع المستندات المطلوبة</div>
+    <p class="step-sub">البطاقة إجبارية، والرخص اختيارية (يمكن إضافتها الآن أو لاحقاً).</p>
+    
+    <div class="upload-box">
+      <label>الواجهة الأمامية للبطاقة الشخصية <span class="req">*</span></label>
+      <input type="file" id="idFrontMoto" accept="image/*,.pdf">
+    </div>
+
+    <div class="upload-box">
+      <label>الواجهة الخلفية للبطاقة الشخصية <span class="req">*</span></label>
+      <input type="file" id="idBackMoto" accept="image/*,.pdf">
+    </div>
+
+    <div class="upload-box">
+      <label>الواجهة الأمامية لرخصة القيادة <span class="opt">(اختياري)</span></label>
+      <input type="file" id="dLicFrontMoto" accept="image/*,.pdf">
+    </div>
+
+    <div class="upload-box">
+      <label>الواجهة الخلفية لرخصة القيادة <span class="opt">(اختياري)</span></label>
+      <input type="file" id="dLicBackMoto" accept="image/*,.pdf">
+    </div>
+
+    <div class="upload-box">
+      <label>الواجهة الأمامية لرخصة الموتوسيكل <span class="opt">(اختياري)</span></label>
+      <input type="file" id="vLicFrontMoto" accept="image/*,.pdf">
+    </div>
+
+    <div class="upload-box">
+      <label>الواجهة الخلفية لرخصة الموتوسيكل <span class="opt">(اختياري)</span></label>
+      <input type="file" id="vLicBackMoto" accept="image/*,.pdf">
+    </div>
+
+    <div class="btn-group">
+      <button type="button" class="btn btn-prev" onclick="goToStep(4)">رجوع</button>
+      <button type="button" class="btn btn-next" id="btnMotoSubmit" onclick="submitFinalData('موتوسيكل')">تأكيد وإرسال الطلب</button>
+    </div>
+  </div>
+
+  <div id="statusBox"></div>
 </div>
 
 <script>
-  // رابط تطبيق الويب الذي قمت بنشره
+  // رابط Web App الخاص بك
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJFq6Qncr7e5oMecHH7LvKUcQJOFS3qAudX1UuGlsTDvPDlO3-xrGp859mWQBFF2U/exec";
 
-  function nextStep() {
-    const name = document.getElementById('fullName').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    const choice = document.getElementById('companyChoice').value;
-
-    if (!name || !phone) {
-      alert('يرجى إدخال الاسم ورقم الهاتف أولاً.');
-      return;
+  function updateDots(activeStep) {
+    for (let i = 1; i <= 5; i++) {
+      const dot = document.getElementById('dot' + i);
+      dot.className = "progress-step";
+      if (i < activeStep) dot.classList.add('done');
+      if (i === activeStep) dot.classList.add('active');
     }
-    if (!choice) {
-      alert('يرجى اختيار مسار التقديم (طلبات أو بريد فاست).');
-      return;
-    }
+  }
 
-    document.getElementById('step1').classList.remove('active');
-    if (choice === 'talabat') {
-      document.getElementById('stepTalabat').classList.add('active');
+  function hideAllSteps() {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  }
+
+  function goToStep(stepNum) {
+    hideAllSteps();
+    document.getElementById('step' + stepNum).classList.add('active');
+    updateDots(stepNum);
+    document.getElementById('statusBox').innerText = "";
+  }
+
+  function toStep2() {
+    const val = document.getElementById('fullName').value.trim();
+    if (!val) { alert("يرجى إدخال الاسم بالكامل"); return; }
+    goToStep(2);
+  }
+
+  function toStep3() {
+    const val = document.getElementById('phone').value.trim();
+    if (!val) { alert("يرجى إدخال رقم الهاتف"); return; }
+    goToStep(3);
+  }
+
+  function adjustVehicles() {
+    const comp = document.getElementById('companyChoice').value;
+    const vSelect = document.getElementById('vehicleChoice');
+    if (comp === "بريد فاست") {
+      vSelect.innerHTML = '<option value="موتوسيكل">موتوسيكل فقط (المتاح ببريد فاست)</option>';
     } else {
-      document.getElementById('stepBreadfast').classList.add('active');
+      vSelect.innerHTML = '<option value="">-- اختر وسيلة العمل --</option><option value="موتوسيكل">موتوسيكل</option><option value="عجلة">عجلة</option>';
     }
   }
 
-  function prevStep() {
-    document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
-    document.getElementById('step1').classList.add('active');
-    document.getElementById('status').innerText = "";
+  function toStep4() {
+    const comp = document.getElementById('companyChoice').value;
+    if (!comp) { alert("يرجى اختيار الشركة أولاً"); return; }
+    goToStep(4);
   }
 
-  function convertFileToBase64(file) {
+  function toStep5() {
+    const vehicle = document.getElementById('vehicleChoice').value;
+    if (!vehicle) { alert("يرجى اختيار وسيلة العمل (المركبة)"); return; }
+    
+    hideAllSteps();
+    if (vehicle === 'عجلة') {
+      document.getElementById('step5Bicycle').classList.add('active');
+    } else {
+      document.getElementById('step5Moto').classList.add('active');
+    }
+    updateDots(5);
+  }
+
+  function fileToBase64(fileInput) {
     return new Promise((resolve) => {
-      if (!file) return resolve(null);
+      if (!fileInput || !fileInput.files || fileInput.files.length === 0) return resolve(null);
+      const file = fileInput.files[0];
       const reader = new FileReader();
       reader.onload = () => resolve({
         name: file.name,
@@ -164,29 +291,44 @@
     });
   }
 
-  async function submitRegistration(companyName, key) {
-    const statusDiv = document.getElementById('status');
-    const submitBtn = document.getElementById(key + 'SubmitBtn');
-    
+  async function submitFinalData(vehicleType) {
+    const statusBox = document.getElementById('statusBox');
+    const submitBtn = vehicleType === 'عجلة' ? document.getElementById('btnBikeSubmit') : document.getElementById('btnMotoSubmit');
+
+    let idFInput = vehicleType === 'عجلة' ? document.getElementById('idFrontBike') : document.getElementById('idFrontMoto');
+    let idBInput = vehicleType === 'عجلة' ? document.getElementById('idBackBike') : document.getElementById('idBackMoto');
+
+    if (!idFInput.files.length || !idBInput.files.length) {
+      alert("يرجى إرفاق وجهي البطاقة الشخصية أولاً (الأمام والخلف)");
+      return;
+    }
+
     submitBtn.disabled = true;
-    statusDiv.className = "loading";
-    statusDiv.innerText = "جاري رفع البيانات والمستندات، يرجى الانتظار...";
+    statusBox.className = "loading";
+    statusBox.innerText = "جاري رفع المستندات وحفظ البيانات، يرجى الانتظار...";
 
-    const fileInput = key === 'talabat' 
-      ? document.getElementById('talabatDoc') 
-      : document.getElementById('breadfastDoc');
-
-    let fileData = null;
-    if (fileInput.files.length > 0) {
-      fileData = await convertFileToBase64(fileInput.files[0]);
+    const idFront = await fileToBase64(idFInput);
+    const idBack = await fileToBase64(idBInput);
+    
+    let dLicFront = null, dLicBack = null, vLicFront = null, vLicBack = null;
+    if (vehicleType === 'موتوسيكل') {
+      dLicFront = await fileToBase64(document.getElementById('dLicFrontMoto'));
+      dLicBack = await fileToBase64(document.getElementById('dLicBackMoto'));
+      vLicFront = await fileToBase64(document.getElementById('vLicFrontMoto'));
+      vLicBack = await fileToBase64(document.getElementById('vLicBackMoto'));
     }
 
     const payload = {
       fullName: document.getElementById('fullName').value.trim(),
       phone: document.getElementById('phone').value.trim(),
-      company: companyName,
-      vehicle: key === 'talabat' ? document.getElementById('talabatVehicle').value : 'موتوسيكل',
-      file: fileData
+      company: document.getElementById('companyChoice').value,
+      vehicle: vehicleType,
+      idFront: idFront,
+      idBack: idBack,
+      dLicFront: dLicFront,
+      dLicBack: dLicBack,
+      vLicFront: vLicFront,
+      vLicBack: vLicBack
     };
 
     fetch(SCRIPT_URL, {
@@ -196,17 +338,18 @@
     .then(res => res.json())
     .then(data => {
       if(data.status === "success") {
-        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
-        statusDiv.className = "success";
-        statusDiv.innerHTML = "✅ تم استلام بياناتك بنجاح! سنتواصل معك عبر واتساب قريباً.";
+        hideAllSteps();
+        document.querySelector('.progress-bar').style.display = 'none';
+        statusBox.className = "success";
+        statusBox.innerHTML = "✅ تم استلام طلبك ومستنداتك بنجاح!<br>سيتم التواصل معك عبر واتساب لتحديد موعد استلام العمل.";
       } else {
-        throw new Error(data.message || "فشل التسجيل");
+        throw new Error(data.message || "خطأ أثناء التسجيل");
       }
     })
     .catch(err => {
       submitBtn.disabled = false;
-      statusDiv.className = "error";
-      statusDiv.innerText = "⚠️ حدث خطأ أثناء إرسال البيانات، يرجى التأكد من اتصال الإنترنت والمحاولة مجدداً.";
+      statusBox.className = "error";
+      statusBox.innerText = "⚠️ حدث خطأ أثناء رفع البيانات، تأكد من اتصال الإنترنت وحاول مرة أخرى.";
     });
   }
 </script>
