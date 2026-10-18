@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>استمارة تسجيل المناديب - RA'AD</title>
+  <style>
+    :root {
+      --bg-color: #0b132b;
+      --card-bg: #1c2541;
+      --primary: #f59e0b;
+      --primary-hover: #d97706;
+      --talabat: #ea580c;
+      --breadfast: #9333ea;
+      --text-main: #ffffff;
+      --text-muted: #94a3b8;
+      --border: #334155;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .container { background-color: var(--card-bg); width: 100%; max-width: 500px; border-radius: 16px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid var(--border); }
+    .header { text-align: center; margin-bottom: 25px; }
+    .badge { display: inline-block; background: rgba(245, 158, 11, 0.15); color: var(--primary); padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; border: 1px solid var(--primary); margin-bottom: 10px; }
+    h1 { font-size: 1.4rem; color: #fff; margin-bottom: 6px; }
+    p.desc { font-size: 0.9rem; color: var(--text-muted); }
+    
+    .step { display: none; }
+    .step.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .form-group { margin-bottom: 18px; }
+    label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; color: #e2e8f0; }
+    input[type="text"], input[type="tel"], select { width: 100%; padding: 12px; background: #0f172a; border: 1px solid var(--border); border-radius: 8px; color: #fff; font-size: 0.95rem; outline: none; }
+    input:focus, select:focus { border-color: var(--primary); }
+    input[type="file"] { width: 100%; padding: 10px; background: #0f172a; border: 1px dashed var(--border); border-radius: 8px; color: var(--text-muted); cursor: pointer; }
+
+    .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.2s ease; margin-top: 10px; }
+    .btn-primary { background-color: var(--primary); color: #0b132b; }
+    .btn-primary:hover { background-color: var(--primary-hover); }
+    .btn-talabat { background-color: var(--talabat); color: #fff; }
+    .btn-talabat:hover { background-color: #c2410c; }
+    .btn-breadfast { background-color: var(--breadfast); color: #fff; }
+    .btn-breadfast:hover { background-color: #7e22ce; }
+    .btn-secondary { background-color: #334155; color: #fff; margin-top: 8px; }
+    .btn-secondary:hover { background-color: #475569; }
+
+    .note { font-size: 0.8rem; color: #cbd5e1; margin-top: 4px; }
+    #status { margin-top: 15px; text-align: center; font-weight: bold; font-size: 0.95rem; }
+    .success { color: #22c55e; }
+    .error { color: #ef4444; }
+    .loading { color: var(--primary); }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="badge">RA'AD Delivery Fleet</div>
+    <h1>طلب انضمام مندوب توصيل</h1>
+    <p class="desc">اختر المسار واستكمل بيانات التسجيل بسهولة</p>
+  </div>
+
+  <!-- المرحلة 1 -->
+  <div class="step active" id="step1">
+    <div class="form-group">
+      <label>الاسم بالكامل:</label>
+      <input type="text" id="fullName" placeholder="أدخل اسمك رباعي" required>
+    </div>
+    <div class="form-group">
+      <label>رقم الهاتف (واتساب):</label>
+      <input type="tel" id="phone" placeholder="01xxxxxxxxx" required>
+    </div>
+    <div class="form-group">
+      <label>اختر مسار التقديم:</label>
+      <select id="companyChoice">
+        <option value="">-- اضغط للاختيار --</option>
+        <option value="talabat">طلبات (Talabat)</option>
+        <option value="breadfast">بريد فاست (Breadfast)</option>
+      </select>
+    </div>
+    <button type="button" class="btn btn-primary" onclick="nextStep()">التالي ➔</button>
+  </div>
+
+  <!-- المرحلة 2: مسار طلبات -->
+  <div class="step" id="stepTalabat">
+    <div class="form-group">
+      <label>المركبة المطلوبة لطلبات:</label>
+      <select id="talabatVehicle">
+        <option value="موتوسيكل">موتوسيكل</option>
+        <option value="عجلة">عجلة</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>رفع صورة البطاقة أو رخصة القيادة:</label>
+      <input type="file" id="talabatDoc" accept="image/*,.pdf">
+      <div class="note">يفضل التقاط صورة واضحة للوجهين.</div>
+    </div>
+    <button type="button" class="btn btn-talabat" id="talabatSubmitBtn" onclick="submitRegistration('طلبات', 'talabat')">تأكيد وإرسال البيانات</button>
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">رجوع</button>
+  </div>
+
+  <!-- المرحلة 2: مسار بريد فاست -->
+  <div class="step" id="stepBreadfast">
+    <div class="form-group">
+      <label>المركبة المتاحة لبريد فاست:</label>
+      <input type="text" value="موتوسيكلات فقط" disabled style="opacity: 0.85;">
+    </div>
+    <div class="form-group">
+      <label>رفع صورة رخصة الموتوسيكل / القيادة:</label>
+      <input type="file" id="breadfastDoc" accept="image/*,.pdf">
+      <div class="note">التعيين مخصص للموتوسيكلات فقط.</div>
+    </div>
+    <button type="button" class="btn btn-breadfast" id="breadfastSubmitBtn" onclick="submitRegistration('بريد فاست', 'breadfast')">تأكيد وإرسال البيانات</button>
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">رجوع</button>
+  </div>
+
+  <div id="status"></div>
+</div>
+
+<script>
+  // رابط تطبيق الويب الذي قمت بنشره
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJFq6Qncr7e5oMecHH7LvKUcQJOFS3qAudX1UuGlsTDvPDlO3-xrGp859mWQBFF2U/exec";
+
+  function nextStep() {
+    const name = document.getElementById('fullName').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const choice = document.getElementById('companyChoice').value;
+
+    if (!name || !phone) {
+      alert('يرجى إدخال الاسم ورقم الهاتف أولاً.');
+      return;
+    }
+    if (!choice) {
+      alert('يرجى اختيار مسار التقديم (طلبات أو بريد فاست).');
+      return;
+    }
+
+    document.getElementById('step1').classList.remove('active');
+    if (choice === 'talabat') {
+      document.getElementById('stepTalabat').classList.add('active');
+    } else {
+      document.getElementById('stepBreadfast').classList.add('active');
+    }
+  }
+
+  function prevStep() {
+    document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+    document.getElementById('step1').classList.add('active');
+    document.getElementById('status').innerText = "";
+  }
+
+  function convertFileToBase64(file) {
+    return new Promise((resolve) => {
+      if (!file) return resolve(null);
+      const reader = new FileReader();
+      reader.onload = () => resolve({
+        name: file.name,
+        type: file.type,
+        data: reader.result.split(',')[1]
+      });
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function submitRegistration(companyName, key) {
+    const statusDiv = document.getElementById('status');
+    const submitBtn = document.getElementById(key + 'SubmitBtn');
+    
+    submitBtn.disabled = true;
+    statusDiv.className = "loading";
+    statusDiv.innerText = "جاري رفع البيانات والمستندات، يرجى الانتظار...";
+
+    const fileInput = key === 'talabat' 
+      ? document.getElementById('talabatDoc') 
+      : document.getElementById('breadfastDoc');
+
+    let fileData = null;
+    if (fileInput.files.length > 0) {
+      fileData = await convertFileToBase64(fileInput.files[0]);
+    }
+
+    const payload = {
+      fullName: document.getElementById('fullName').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      company: companyName,
+      vehicle: key === 'talabat' ? document.getElementById('talabatVehicle').value : 'موتوسيكل',
+      file: fileData
+    };
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+      if(data.status === "success") {
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+        statusDiv.className = "success";
+        statusDiv.innerHTML = "✅ تم استلام بياناتك بنجاح! سنتواصل معك عبر واتساب قريباً.";
+      } else {
+        throw new Error(data.message || "فشل التسجيل");
+      }
+    })
+    .catch(err => {
+      submitBtn.disabled = false;
+      statusDiv.className = "error";
+      statusDiv.innerText = "⚠️ حدث خطأ أثناء إرسال البيانات، يرجى التأكد من اتصال الإنترنت والمحاولة مجدداً.";
+    });
+  }
+</script>
+
+</body>
+</html>
